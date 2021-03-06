@@ -9,17 +9,21 @@ public class UserRepositoryInMemoryImpl implements UserRepository {
   private final Map<Long, UserEntity> idToEntity = new HashMap<>();
   private final Map<String, UserEntity> loginToEntity = new HashMap<>(); // намеренная избыточность
 
+
+  //Возвращает всех пользователей
   @Override
   public List<UserEntity> findAll() {
     return List.copyOf(idToEntity.values());
   }
 
+  //Находит пользователя id
   @Override
   public Optional<UserEntity> findById(Long id) {
     // Optional.of(null) -> NPE
     return Optional.ofNullable(idToEntity.get(id));
   }
 
+  //создание нового пользователя
   @Override
   public UserEntity save(UserEntity entity) {
     // id = 0 ? новый : старый (обновляем)
@@ -32,17 +36,22 @@ public class UserRepositoryInMemoryImpl implements UserRepository {
     return idToEntity.put(entity.getId(), entity);
   }
 
+  //Удаление пользвателя по id
   @Override
   public boolean removeById(Long id) {
     // FIXME: мы не хотели так-то удалять юзера
-    return idToEntity.remove(id) != null;
+      idToEntity.get(id).setRemoved(true);
+      return true;
+//    return idToEntity.remove(id) != null;
   }
 
+  //Проверка на существование пользователя по логину
   @Override
   public boolean existsByLogin(String login) {
     return loginToEntity.containsKey(login);
   }
 
+  //Нахождение пользователя по логину
   @Override
   public Optional<UserEntity> findByLogin(String login) {
     return Optional.ofNullable(loginToEntity.get(login));

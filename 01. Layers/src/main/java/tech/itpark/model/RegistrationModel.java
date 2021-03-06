@@ -1,21 +1,16 @@
 package tech.itpark.model;
 
 // Data Class (Immutable) -> Record
-public class RegistrationModel {
-  private final String login;
+public class RegistrationModel extends Model {
   private final String password;
   private final String name;
   private final String secret;
 
   public RegistrationModel(String login, String password, String name, String secret) {
-    this.login = login;
+    super(login);
     this.password = password;
     this.name = name;
     this.secret = secret;
-  }
-
-  public String getLogin() {
-    return login;
   }
 
   public String getPassword() {

@@ -2,17 +2,16 @@ package tech.itpark.model;
 
 import java.util.Set;
 
-public class UserModel {
+public class UserModel extends Model{
   private final long id;
-  private final String login;
   private final String name;
   private final Set<String> roles;
   private final boolean removed;
   private final long created;
 
   public UserModel(long id, String login, String name, Set<String> roles, boolean removed, long created) {
+    super(login);
     this.id = id;
-    this.login = login;
     this.name = name;
     this.roles = roles;
     this.removed = removed;
@@ -21,10 +20,6 @@ public class UserModel {
 
   public long getId() {
     return id;
-  }
-
-  public String getLogin() {
-    return login;
   }
 
   public String getName() {

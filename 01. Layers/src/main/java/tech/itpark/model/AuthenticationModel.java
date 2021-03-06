@@ -1,17 +1,12 @@
 package tech.itpark.model;
 
 // Data Class (Immutable) -> Record
-public class AuthenticationModel {
-  private final String login;
+public class  AuthenticationModel extends Model {
   private final String password;
 
   public AuthenticationModel(String login, String password) {
-    this.login = login;
+    super(login);
     this.password = password;
-  }
-
-  public String getLogin() {
-    return login;
   }
 
   public String getPassword() {

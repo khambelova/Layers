@@ -9,7 +9,7 @@ public interface UserRepository extends CrudRepository<UserEntity, Long> {
   Optional<UserEntity> findByLogin(String login);
 }
 
-//// CrudRepository
+
 //public interface UserRepository {
 //  // crud
 //  List<UserEntity> findAll();

@@ -2,6 +2,7 @@ package tech.itpark.service;
 
 import tech.itpark.entity.UserEntity;
 import tech.itpark.exception.PasswordInvalidException;
+import tech.itpark.exception.SecretInvalidException;
 import tech.itpark.exception.UsernameAlreadyExistsException;
 import tech.itpark.exception.UsernameNotExistsException;
 import tech.itpark.model.*;
@@ -54,15 +55,10 @@ public class UserServiceDefaultImpl implements UserService {
     );
   }
 
+
   @Override
   public UserModel login(AuthenticationModel model) {
-    UserEntity entity = repository
-        .findByLogin(model.getLogin())
-        .orElseThrow(() -> new UsernameNotExistsException(model.getLogin()));
-
-    if (entity.isRemoved()) {
-      throw new UsernameNotExistsException(model.getLogin());
-    }
+    UserEntity entity = getUserEntityByModel(model);
 
     if (!entity.getPassword().equals(model.getPassword())) {
       // username or password invalid
@@ -74,13 +70,41 @@ public class UserServiceDefaultImpl implements UserService {
     return createUserModel(entity);
   }
 
+  private UserEntity getUserEntityByModel(Model model)
+  {
+    UserEntity entity = repository
+            .findByLogin(model.getLogin())
+            .orElseThrow(() -> new UsernameNotExistsException(model.getLogin()));
+
+    if (entity.isRemoved()) {
+      throw new UsernameNotExistsException(model.getLogin());
+    }
+
+    return entity;
+  }
+
   @Override
   public UserModel reset(ResetModel model) {
-    return null;
+
+   UserEntity entity = getUserEntityByModel(model);
+
+    if (entity.getSecret().equals(model.getSecret()))
+    {
+         entity.setPassword(model.getNewPassword());
+    }
+    else {
+      throw new SecretInvalidException();
+    }
+
+    return createUserModel(entity);
   }
 
   @Override
   public boolean remove(RemovalModel model) {
-    return false;
+
+    UserEntity entity = getUserEntityByModel(model);
+
+    entity.setRemoved(true);
+    return true;
   }
 }
